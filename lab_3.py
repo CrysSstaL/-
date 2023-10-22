@@ -55,11 +55,14 @@ class Array3d:
     def SetValues_Thrice(self, z, y, x, value):  # В 3 приближение на элемент [0][0][0] ставим значение 1
         self.data[self.__transform_index(x, y, z)] = value
 
+    def npfill(self, values):  # заполнение массива одинаковыми элементами values
+        self.data = [values] * self.length
 
 ###################
 
 if __name__ == '__main__':
     array = Array3d(3, 3, 3, 10)
+    array.npfill(0)   # заполнение массива одинаковыми элементами values
     # array[0, 0, 0] = 1
     # array[1, 1, 1] = 8
     # array.SetValues_Once(0, [[3, 3, 3],
