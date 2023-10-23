@@ -1,22 +1,22 @@
 
 class Array3d:
     def __init__(self, width, height, depth, values):
-        self.width = width  # ширина
-        self.height = height  # высота
-        self.depth = depth  # глубина
-        self.values = values
-        self.length = width * height * depth  # общая длина нашего одномерного массива хранящегося внутри класса
-        self.data = [values] * self.length  # заполняем наш массив значениями int
+        self.__width = width  # ширина
+        self.__height = height  # высота
+        self.__depth = depth  # глубина
+        self.__values = values
+        self.__length = width * height * depth  # общая длина нашего одномерного массива хранящегося внутри класса
+        self.__data = [values] * self.__length  # заполняем наш массив значениями int
 
     def __transform_index(self, x, y, z):  # преобразование трехмерного индекса в одномерный индекс
-        return x + self.width * (y + self.height * z)
+        return x + self.__width * (y + self.__height * z)
 
     def __str__(self):  # Переопределяем написание массива
         result = ""
-        for z in range(self.depth):
+        for z in range(self.__depth):
             result += f"Глубина: {z}\n"
-            for y in range(self.height):
-                for x in range(self.width):
+            for y in range(self.__height):
+                for x in range(self.__width):
                     result += f"{self.data[self.__transform_index(x, y, z)]} "
                 result += "\n"
             result += "\n"
@@ -25,15 +25,15 @@ class Array3d:
     ################ Get
     def GetValues_Once(self, z):  # Получаем значение по 1 приближению (двумерный массив)
         result = ""
-        for y in range(self.height):
+        for y in range(self.__height):
             result += "\n"
-            for x in range(self.width):
-                result += f"{self.data[self.__transform_index(x, y, z)]} "
+            for x in range(self.__width):
+                result += f"{self.data[self.__transform_index(x, y, z)]}"
         return result
 
     def GetValues_Twice(self, z, y):  # Получаем значение по 2 приближению (одномерный массив)
         result = ""
-        for x in range(self.width):
+        for x in range(self.__width):
             result += f"{self.data[self.__transform_index(x, y, z)]} "
         return result
 
@@ -44,19 +44,19 @@ class Array3d:
     ################### Set
 
     def SetValues_Once(self, z, array):  # В 1 приближении на 0 элемент ставим двумерный массив [[3,3,3],[3,3,3],[3,3,3]]
-        for y in range(self.height):
-            for x in range(self.width):
+        for y in range(self.__height):
+            for x in range(self.__width):
                  self.data[self.__transform_index(x, y, z)] = array[y][x]
 
     def SetValues_Twice(self, z, y, array):  # В 2 приближении на элемент [0][0] ставим одномерный массив [3,3,3]
-        for x in range(self.width):
+        for x in range(self.__width):
             self.data[self.__transform_index(x, y, z)] = array[x]
 
     def SetValues_Thrice(self, z, y, x, value):  # В 3 приближение на элемент [0][0][0] ставим значение 1
         self.data[self.__transform_index(x, y, z)] = value
 
     def npfill(self, values):  # заполнение массива одинаковыми элементами values
-        self.data = [values] * self.length
+        self.data = [values] * self.__length
 
 ###################
 
