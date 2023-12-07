@@ -1,8 +1,10 @@
 import sympy as sym
 from sympy import *
+from abc import ABC, abstractmethod
+
 
 # Абстрактный класс который не вызывается, а только инициализирует данные
-class Abstract:
+class Abstract(ABC):
     # Инициализайия данных
     def __init__(self, function, delta_x, point):
         self._function = function
@@ -16,6 +18,22 @@ class Abstract:
 
     def getFunction(self):
         return self._function
+
+    @abstractmethod
+    def right_p(self):
+        pass
+
+    @abstractmethod
+    def left_p(self):
+        pass
+
+    @abstractmethod
+    def center_p(self):
+        pass
+
+    @abstractmethod
+    def diff(self):
+        pass
 
 
 class Calc(Abstract):
