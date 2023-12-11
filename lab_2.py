@@ -2,62 +2,76 @@ class Fract:
     # инициализация данных в классе
     # используем магические методы!
     def __init__(self, num, denom):
-        self.num = num
-        self.denom = denom
+        self.__num = num
+        self.__denom = denom
 
-    def __str__(self): # вызывается print (чтобы печетались данные, а не обьекты)
-        return str(self.num)+'/'+str(self.denom)
+    def __str__(self):  # вызывается print (чтобы печетались данные, а не обьекты)
+        return str(self.__num) + '/' + str(self.__denom)
 
-    def decimal_fract(self): # перевод в десячиную дробь
-        return round(self.num / self.denom, 6)
+    def decimal_fract(self):  # перевод в десячиную дробь
+        return round(self.__num / self.__denom, 6)
 
     def __add__(self, other):  # сложение
-        new_num = self.num * other.denom + other.num * self.denom
-        new_denom = self.denom * other.denom
+        new_num = self.__num * other.__denom + other.__num * self.__denom
+        new_denom = self.__denom * other.__denom
         degree = reduction(new_num, new_denom)
-        return Fract(new_num//degree, new_denom//degree)
+        return Fract(new_num // degree, new_denom // degree)
 
     def __sub__(self, other):  # вычитание
-        new_num = self.num * other.denom - other.num * self.denom
-        new_denom = self.denom * other.denom
+        new_num = self.__num * other.__denom - other.__num * self.__denom
+        new_denom = self.__denom * other.__denom
         degree = reduction(new_num, new_denom)
-        return Fract(new_num//degree, new_denom//degree)
+        return Fract(new_num // degree, new_denom // degree)
 
-    def __mul__(self, other): # умножение
-        new_num = self.num * other.num
-        new_denom = self.denom * other.denom
+    def __mul__(self, other):  # умножение
+        new_num = self.__num * other.__num
+        new_denom = self.__denom * other.__denom
         degree = reduction(new_num, new_denom)
-        return Fract(new_num//degree, new_denom//degree)
+        return Fract(new_num // degree, new_denom // degree)
 
-    def __floordiv__(self, other): # деление
-        new_num = self.num * other.denom
-        new_denom = self.denom * other.num
+    def __floordiv__(self, other):  # деление
+        new_num = self.__num * other.__denom
+        new_denom = self.__denom * other.__num
         degree = reduction(new_num, new_denom)
-        return Fract(new_num//degree, new_denom//degree)
+        return Fract(new_num // degree, new_denom // degree)
 
     #   Сравнение дробей
-    def __ne__(self, other): # проверка на неравенство
-        return (self.num * other.denom) != (other.num * self.denom)
+    def __ne__(self, other):  # проверка на неравенство
+        return (self.__num * other.__denom) != (other.__num * self.__denom)
 
-    def __eq__(self, other): # проверка на равенство
-        return (self.num * other.denom) == (other.num * self.denom)
+    def __eq__(self, other):  # проверка на равенство
+        return (self.__num * other.__denom) == (other.__num * self.__denom)
 
-    def __gt__(self, other): # проверка на 1 дробь > 2 дробь
-        return str(self.num * other.denom) > str(other.num * self.denom)
+    def __gt__(self, other):  # проверка на 1 дробь > 2 дробь
+        return str(self.__num * other.__denom) > str(other.__num * self.__denom)
 
-    def __lt__(self, other): # проверка на 1 дробь < 2 дробь
-        return self.num * other.denom < other.num * self.denom
+    def __lt__(self, other):  # проверка на 1 дробь < 2 дробь
+        return self.__num * other.__denom < other.__num * self.__denom
 
 
-def reduction(m, n): # НОД для сокращения дробей
+def reduction(m, n):  # НОД для сокращения дробей
     while m % n != 0:
         m, n = n, m % n
     return n
 
 
+def CorrectlyNumber():
+    while True:
+        try:
+            num = int(input())
+            return num
+        except Exception:
+            print("Неправильный ввод")
+            print("!!! Введите дробь 2 числами !!!")
+            print("!!! Первое число это числитель !!!")
+            print("!!! Второе знаменатель !!!")
+
+
 if __name__ == "__main__":
-    f1 = Fract(int(input()), int(input()))
-    f2 = Fract(int(input()), int(input()))
+    print("Введите дробь 2 числами")
+    f1 = Fract(CorrectlyNumber(), CorrectlyNumber())
+    print("Введите дробь 2 числами")
+    f2 = Fract(CorrectlyNumber(), CorrectlyNumber())
     print(f" f1 = {f1}   f2 = {f2} ")
     print(f" Сумма = {f1 + f2}")
     print(f" Десятичная дробь от суммы = {(f1 + f2).decimal_fract()}")
