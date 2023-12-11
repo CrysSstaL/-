@@ -37,6 +37,9 @@ class Abstract(ABC):
 
 
 class Calc(Abstract):
+    def __init__(self, function, delta_x, point):
+        super().__init__(function, delta_x, point)
+
     def right_p(self):
         # Формула правой производной через предел
         return round(sym.limit((self._f(x + self._delta_x) - self._f(x)) / self._delta_x, x, self._point, dir='+'), 5)
