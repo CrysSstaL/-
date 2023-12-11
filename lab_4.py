@@ -3,57 +3,66 @@ import time
 
 class Key:
     def __init__(self, keyName):
-        self.keyName = keyName
+        self.__keyName = keyName
 
     def getName(self):
-        return self.keyName
+        return self.__keyName
 
     def setName(self, newKey):
-        self.keyName = newKey
+        self.__keyName = newKey
 
     def press_key(self):
-        print(f'Нажата кнопка: {self.keyName}')
+        print(f'Нажата кнопка: {self.__keyName}')
         time.sleep(0.5)  # Задержка между нажатиями клавиш
-        actions.append(self)
+        actions.addAction(self)
 
     def reassign_key(self, newKey, actions):
-        print(f'Переназначаем: {self.keyName} -> {newKey}')
-        for action in actions:
-            if action.getName() == self.keyName:
-                action.setName(newKey)
-        return actions
+        print(f'Переназначаем: {self.__keyName} -> {newKey.getName()}')
+        for i in range(len(actions.getActions())):
+            if actions.getActions()[i].getName() == self.__keyName:
+                actions.getActions()[i] = newKey
 
 
-def undo_last_action(actions):
-    if len(actions) > 0:
-        last_action = actions.pop()
-        print(f'Последнее нажатие - {last_action.getName()}')
-    else:
-        print('Нет последних нажатий')
+class Actions:
+    def __init__(self):
+        self.__actions = []
 
+    def getActions(self):
+        return self.__actions
 
-def printActions(actions):
-    for action in actions:
-        print(action.getName())
+    def addAction(self, key):
+        self.__actions.append(key)
+
+    def canselLastAction(self):
+        if len(self.__actions) > 0:
+            last_action = self.__actions.pop()
+            print(f'Последние нажатие - {last_action.getName()}')
+        else:
+            print('Нет событий нажатия')
+
+    def printActions(self):
+        for i in self.__actions:
+            print(i.getName())
 
 
 if __name__ == '__main__':
-    actions = []
+    actions = Actions()
     # Пример демонстрации нажатия комбинаций клавиш
     key1 = Key('Ctrl+C')
     key1.press_key()
     key2 = Key('Ctrl+V')
     key2.press_key()
-    printActions(actions)
+    actions.printActions()
     print("----------")
     # Пример отката последнего действия
-    undo_last_action(actions)
-    printActions(actions)
+    actions.canselLastAction()
+    actions.printActions()
     print("----------")
     key2.press_key()
-    printActions(actions)
+    actions.printActions()
     print("----------")
     # Пример переназначения клавиши
-    actions = key2.reassign_key('Ctrl+P', actions)
-    printActions(actions)
+    key3 = Key('Ctrl+P')
+    key2.reassign_key(key3, actions)
+    actions.printActions()
     print("----------")
