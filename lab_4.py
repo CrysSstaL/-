@@ -2,11 +2,16 @@ import time
 
 
 class Key:
-    def __init__(self, keyName):
+    def __init__(self, keyName, control):
         self.__keyName = keyName
+        self.__control = control
 
     def getName(self):
         return self.__keyName
+
+    @property
+    def control(self):
+        return self.__control
 
     def setName(self, newKey):
         self.__keyName = newKey
@@ -14,13 +19,18 @@ class Key:
     def press_key(self):
         print(f'Нажата кнопка: {self.__keyName}')
         time.sleep(0.5)  # Задержка между нажатиями клавиш
-        actions.addAction(self)
 
-    def reassign_key(self, newKey, actions):
+    def reassign_key(self, newKey):
         print(f'Переназначаем: {self.__keyName} -> {newKey.getName()}')
-        for i in range(len(actions.getActions())):
-            if actions.getActions()[i].getName() == self.__keyName:
-                actions.getActions()[i] = newKey
+        self.__control = newKey.control
+
+
+class Controls:
+    def open(self):
+        print("Open app")
+
+    def close(self):
+        print("Close app")
 
 
 class Actions:
@@ -32,11 +42,15 @@ class Actions:
 
     def addAction(self, key):
         self.__actions.append(key)
+        key.control.open()
+        time.sleep(0.5)
 
-    def canselLastAction(self):
+    def CancelLastAction(self):
         if len(self.__actions) > 0:
             last_action = self.__actions.pop()
             print(f'Последние нажатие - {last_action.getName()}')
+            time.sleep(0.5)
+            last_action.control.close()
         else:
             print('Нет событий нажатия')
 
@@ -47,22 +61,32 @@ class Actions:
 
 if __name__ == '__main__':
     actions = Actions()
+    app = Key("Telegram", Controls())
+    actions.addAction(app)
+    actions.printActions()
+    print("----------")
+
+    actions.CancelLastAction()
+    actions.printActions()
+    print("----------")
+
     # Пример демонстрации нажатия комбинаций клавиш
-    key1 = Key('Ctrl+C')
-    key1.press_key()
-    key2 = Key('Ctrl+V')
-    key2.press_key()
+    key1 = Key('Ctrl+C', Controls())
+    actions.addAction(key1)
+    key2 = Key('Ctrl+V', Controls())
+    actions.addAction(key2)
+
+    key3 = Key('X', Controls())
+    key4 = Key('Y', Controls())
+    actions.addAction(key3)
+    actions.addAction(key4)
     actions.printActions()
     print("----------")
-    # Пример отката последнего действия
-    actions.canselLastAction()
+    actions.CancelLastAction()
     actions.printActions()
+
     print("----------")
-    key2.press_key()
-    actions.printActions()
-    print("----------")
-    # Пример переназначения клавиши
-    key3 = Key('Ctrl+P')
-    key2.reassign_key(key3, actions)
+    key3 = Key('Ctrl+Q', Controls)
+    key2.reassign_key(key3)
     actions.printActions()
     print("----------")
